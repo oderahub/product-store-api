@@ -12,22 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const db_1 = require("./src/db");
-const logger_1 = __importDefault(require("./config/logger"));
+exports.connectDB = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
+const logger_1 = __importDefault(require("../config/logger"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const app = (0, express_1.default)();
-const port = process.env.PORT;
-app.get('/', (req, res) => {
-    res.send('Welcome to the Store API!');
-});
-app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
+const connectionString = process.env.MongoDb_URI;
+const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield (0, db_1.connectDB)();
-        logger_1.default.info(`app is running on ${port}...`);
+        if (!connectionString) {
+            throw new Error('MongoDB connection string is missing in environment variables.');
+        }
+        yield mongoose_1.default.connect(connectionString);
+        logger_1.default.info('Successfully connected to MongoDB');
     }
     catch (error) {
-        logger_1.default.error('Failed to connect to Database');
+        logger_1.default.error('Failed to connect to MongoDB', { error });
+        process.exit(1);
     }
-}));
+});
+exports.connectDB = connectDB;
