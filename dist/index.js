@@ -13,11 +13,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const db_1 = require("./src/db");
+const db_1 = require("./config/db");
 const logger_1 = __importDefault(require("./config/logger"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const helmet_1 = __importDefault(require("helmet"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const auth_route_1 = __importDefault(require("./routes/auth.route"));
+const _product_route_1 = __importDefault(require("./routes/ product.route"));
+const user_route_1 = __importDefault(require("./routes/user.route"));
+const error_middleware_1 = require("./middlewares/error.middleware");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+app.use((0, helmet_1.default)());
+// Middleware for parsing JSON
+app.use(body_parser_1.default.json());
+// Rate limiting
+const apiLimiter = (0, express_rate_limit_1.default)({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // Limit each IP to 100 requests per windowMs
+});
+app.use('/api/', apiLimiter);
+// Routes
+app.use('/api/v1/auth', auth_route_1.default);
+app.use('/api/v1/products', _product_route_1.default);
+app.use('/api/v1/users', user_route_1.default);
+// Error handling middleware
+app.use(error_middleware_1.errorHandler);
 const port = process.env.PORT;
 app.get('/', (req, res) => {
     res.send('Welcome to the Store API!');

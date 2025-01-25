@@ -43,15 +43,19 @@ const logger_1 = __importDefault(require("../config/logger"));
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    if (token == null)
-        return res.status(401).json({ message: constants_1.ErrorMessages.UNAUTHENTICATED_USER });
+    if (token == null) {
+        res.status(401).json({ message: constants_1.ErrorMessages.UNAUTHENTICATED_USER });
+        return;
+    }
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
             logger_1.default.error('JWT Verification Error', { error: err });
-            return res.status(403).json({ message: constants_1.ErrorMessages.INVALID_TOKEN });
+            res.status(403).json({ message: constants_1.ErrorMessages.INVALID_TOKEN });
         }
-        req.user = user;
-        next();
+        else {
+            req.user = user;
+            next();
+        }
     });
 };
 exports.authenticateToken = authenticateToken;
