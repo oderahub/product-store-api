@@ -1,12 +1,11 @@
-import { Model, Types } from 'mongoose'
+import { Model } from 'mongoose'
 import { IUser, IUserService } from '../interfaces/user.interface'
 import { IUserDocument, User } from '../models/user.model'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { BaseService } from './base.service'
-import { ErrorMessages, SuccessMessages, UserRoles } from '../constants'
+import { ErrorMessages, UserRoles } from '../constants'
 import { createUserSchema, loginUserSchema } from '../validators/user.validator'
-import logger from '../config/logger'
 import { validateSchema } from '../utiles/helper'
 import { Product } from '../models/product.model'
 
@@ -21,7 +20,7 @@ export class UserService
   async createUser(user: IUser): Promise<IUser> {
     validateSchema(user, createUserSchema, 'createUser')
 
-    if (await this.model.findOne({ username: user.username })) {
+    if (await this.model.findOne({ email: user.email })) {
       throw new Error(ErrorMessages.USER_ALREADY_EXISTS)
     }
 

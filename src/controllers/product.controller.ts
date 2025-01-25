@@ -1,9 +1,8 @@
-// product.controller.ts
 import { Request, Response } from 'express'
 import { ProductService } from '../services/product.service'
 import { IProduct } from '../interfaces/product.interface'
 import { BaseController } from './base.controller'
-import { ErrorMessages, SuccessMessages, HTTP_STATUS, UserRoles } from '../constants'
+import { ErrorMessages, SuccessMessages, HTTP_STATUS } from '../constants'
 
 export class ProductController extends BaseController<IProduct> {
   private productService: ProductService

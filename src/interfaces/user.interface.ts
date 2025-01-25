@@ -2,12 +2,14 @@ import { UserRoles } from '../constants'
 import { Types } from 'mongoose'
 
 export interface IUser {
-  username: string
+  firstName: string
+  lastName: string
   password: string
   role: UserRoles
   products?: string[]
   _id: Types.ObjectId
   userId?: string
+  email: string
 }
 
 export interface IUserService {

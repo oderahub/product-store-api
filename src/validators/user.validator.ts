@@ -1,9 +1,17 @@
 import Joi from 'joi'
 import { ErrorMessages } from '../constants'
 
-export const createUserSchema = Joi.object({
-  username: Joi.string().email().required().messages({
+const baseUserSchema = {
+  email: Joi.string().email().required().messages({
     'string.email': 'Invalid email supplied'
+  }),
+  firstName: Joi.string().min(2).max(50).required().messages({
+    'string.min': 'First name must be at least 2 characters',
+    'string.max': 'First name cannot exceed 50 characters'
+  }),
+  lastName: Joi.string().min(2).max(50).required().messages({
+    'string.min': 'Last name must be at least 2 characters',
+    'string.max': 'Last name cannot exceed 50 characters'
   }),
   password: Joi.string()
     .min(8)
@@ -12,14 +20,14 @@ export const createUserSchema = Joi.object({
     .messages({
       'string.min': 'Password cannot be less than 8 characters',
       'string.pattern.base':
-        'Password must contain at least one lowercase, one uppercase, one number and one special character'
+        'Password must contain at least one lowercase, one uppercase, one number, and one special character'
     }),
   role: Joi.string().valid('user', 'admin').default('user')
-})
+}
+
+export const createUserSchema = Joi.object(baseUserSchema)
 
 export const loginUserSchema = Joi.object({
-  username: Joi.string().email().required().messages({
-    'string.email': 'Invalid email supplied'
-  }),
-  password: Joi.string().required()
+  email: baseUserSchema.email,
+  password: baseUserSchema.password
 })

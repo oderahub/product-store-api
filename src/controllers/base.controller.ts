@@ -1,6 +1,6 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import { asyncWrapper } from '../utiles/asyncWrapper'
-import { ErrorMessages, SuccessMessages, HTTP_STATUS } from '../constants'
+import { HTTP_STATUS } from '../constants'
 import logger from '../config/logger'
 
 export abstract class BaseController<T> {

@@ -1,4 +1,3 @@
-// user.controller.ts
 import { Request, Response } from 'express'
 import { UserService } from '../services/user.service'
 import { IUser, LoginResponse } from '../interfaces/user.interface'
@@ -17,7 +16,12 @@ export class UserController extends BaseController<IUser> {
   public registerUser = this.asyncWrapperHandler(async (req: Request, res: Response) => {
     try {
       const user = await this.userService.createUser(req.body)
-      this.handleResponse(res, SuccessMessages.USER_CREATED, user, HTTP_STATUS.CREATED)
+      this.handleResponse(
+        res,
+        SuccessMessages.USER_CREATED,
+        { userId: user._id },
+        HTTP_STATUS.CREATED
+      )
     } catch (error: any) {
       this.handleError(res, error)
     }
