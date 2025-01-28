@@ -24,8 +24,7 @@ export class UserService
       throw new Error(ErrorMessages.USER_ALREADY_EXISTS)
     }
 
-    const hashedPassword = await bcrypt.hash(user.password, 10)
-    const newUser = new this.model({ ...user, password: hashedPassword })
+    const newUser = new this.model(user) // Pass the user object directly, the password will be hashed by the middleware
     await newUser.save()
 
     if (user.role === UserRoles.ADMIN) {
@@ -49,10 +48,7 @@ export class UserService
       ErrorMessages.USER_NOT_FOUND
     )
 
-    if (user.password) {
-      user.password = await bcrypt.hash(user.password, 10)
-    }
-
+    // The hashing will be done by the middleware if password is modified
     if (user.role === UserRoles.ADMIN && existingUser.role !== UserRoles.ADMIN) {
       await this.model.updateMany(
         { _id: { $ne: id }, role: UserRoles.ADMIN },
@@ -76,17 +72,24 @@ export class UserService
     }
   }
 
-  async login(username: string, password: string): Promise<{ userId: string; token: string }> {
-    validateSchema({ username, password }, loginUserSchema, 'login')
+  async login(email: string, password: string): Promise<{ userId: string; token: string }> {
+    validateSchema({ email, password }, loginUserSchema, 'login')
 
-    const user = await this.model.findOne({ username })
+    const user = await this.model.findOne({ email: email.toLowerCase() })
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new Error(ErrorMessages.INCORRECT_LOGIN_CREDENTIALS)
     }
 
+    // Generate JWT with user details
     const token = jwt.sign(
-      { userId: user._id.toString(), role: user.role }, // Corrected type assertion for _id
-      process.env.TOKEN_SECRET as string
+      {
+        userId: user._id,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName
+      },
+      process.env.TOKEN_SECRET as string,
+      { expiresIn: '1h' }
     )
     return { userId: user._id.toString(), token }
   }

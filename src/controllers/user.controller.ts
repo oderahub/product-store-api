@@ -29,8 +29,9 @@ export class UserController extends BaseController<IUser> {
 
   public loginUser = this.asyncWrapperHandler(async (req: Request, res: Response) => {
     try {
-      const { userId, token } = await this.userService.login(req.body.username, req.body.password)
-      this.handleResponse(res, SuccessMessages.LOGIN_SUCCESSFUL, { userId, token } as LoginResponse)
+      const { email, password } = req.body
+      const { userId, token } = await this.userService.login(email, password)
+      this.handleResponse(res, SuccessMessages.LOGIN_SUCCESSFUL, { userId, token })
     } catch (error: any) {
       this.handleError(res, error)
     }

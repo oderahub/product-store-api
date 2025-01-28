@@ -1,9 +1,9 @@
 import Joi from 'joi'
-import { ErrorMessages } from '../constants'
 
 const baseUserSchema = {
   email: Joi.string().email().required().messages({
-    'string.email': 'Invalid email supplied'
+    'string.email': 'Invalid email supplied',
+    'any.required': '"email" is required'
   }),
   firstName: Joi.string().min(2).max(50).required().messages({
     'string.min': 'First name must be at least 2 characters',
@@ -20,7 +20,8 @@ const baseUserSchema = {
     .messages({
       'string.min': 'Password cannot be less than 8 characters',
       'string.pattern.base':
-        'Password must contain at least one lowercase, one uppercase, one number, and one special character'
+        'Password must contain at least one lowercase, one uppercase, one number, and one special character',
+      'any.required': '"password" is required'
     }),
   role: Joi.string().valid('user', 'admin').default('user')
 }

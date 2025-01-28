@@ -20,7 +20,7 @@ class UserController extends base_controller_1.BaseController {
         this.registerUser = this.asyncWrapperHandler((req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield this.userService.createUser(req.body);
-                this.handleResponse(res, constants_1.SuccessMessages.USER_CREATED, user, constants_1.HTTP_STATUS.CREATED);
+                this.handleResponse(res, constants_1.SuccessMessages.USER_CREATED, { userId: user._id }, constants_1.HTTP_STATUS.CREATED);
             }
             catch (error) {
                 this.handleError(res, error);
@@ -28,7 +28,8 @@ class UserController extends base_controller_1.BaseController {
         }));
         this.loginUser = this.asyncWrapperHandler((req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userId, token } = yield this.userService.login(req.body.username, req.body.password);
+                const { email, password } = req.body;
+                const { userId, token } = yield this.userService.login(email, password);
                 this.handleResponse(res, constants_1.SuccessMessages.LOGIN_SUCCESSFUL, { userId, token });
             }
             catch (error) {

@@ -4,7 +4,14 @@ import { ErrorMessages, UserRoles } from '../constants'
 import logger from '../config/logger'
 
 interface AuthenticatedRequest extends Request {
-  user?: { userId: string; role: string }
+  user?: {
+    userId: string
+    role: string
+    firstName?: string
+    lastName?: string
+    iat?: number
+    exp?: number
+  }
 }
 
 export const authenticateToken = (
@@ -24,12 +31,13 @@ export const authenticateToken = (
     if (err) {
       logger.error('JWT Verification Error', { error: err })
       res.status(403).json({ message: ErrorMessages.INVALID_TOKEN })
-    } else {
-      req.user = user
-      next()
+      return
     }
+    req.user = user
+    next()
   })
 }
+
 export const checkRole =
   (requiredRole: UserRoles) =>
   (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {

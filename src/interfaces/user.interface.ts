@@ -5,7 +5,7 @@ export interface IUser {
   firstName: string
   lastName: string
   password: string
-  role: UserRoles
+  role?: UserRoles
   products?: string[]
   _id: Types.ObjectId
   userId?: string

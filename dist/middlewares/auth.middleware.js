@@ -51,11 +51,10 @@ const authenticateToken = (req, res, next) => {
         if (err) {
             logger_1.default.error('JWT Verification Error', { error: err });
             res.status(403).json({ message: constants_1.ErrorMessages.INVALID_TOKEN });
+            return;
         }
-        else {
-            req.user = user;
-            next();
-        }
+        req.user = user;
+        next();
     });
 };
 exports.authenticateToken = authenticateToken;

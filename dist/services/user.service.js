@@ -29,11 +29,10 @@ class UserService extends base_service_1.BaseService {
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             (0, helper_1.validateSchema)(user, user_validator_1.createUserSchema, 'createUser');
-            if (yield this.model.findOne({ username: user.username })) {
+            if (yield this.model.findOne({ email: user.email })) {
                 throw new Error(constants_1.ErrorMessages.USER_ALREADY_EXISTS);
             }
-            const hashedPassword = yield bcryptjs_1.default.hash(user.password, 10);
-            const newUser = new this.model(Object.assign(Object.assign({}, user), { password: hashedPassword }));
+            const newUser = new this.model(user); // Pass the user object directly, the password will be hashed by the middleware
             yield newUser.save();
             if (user.role === constants_1.UserRoles.ADMIN) {
                 yield this.model.updateMany({ _id: { $ne: newUser._id }, role: constants_1.UserRoles.ADMIN }, { $set: { role: constants_1.UserRoles.USER } });
@@ -50,9 +49,7 @@ class UserService extends base_service_1.BaseService {
     updateUser(id, user) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingUser = yield this.validateExistence(yield this.findById(id), constants_1.ErrorMessages.USER_NOT_FOUND);
-            if (user.password) {
-                user.password = yield bcryptjs_1.default.hash(user.password, 10);
-            }
+            // The hashing will be done by the middleware if password is modified
             if (user.role === constants_1.UserRoles.ADMIN && existingUser.role !== constants_1.UserRoles.ADMIN) {
                 yield this.model.updateMany({ _id: { $ne: id }, role: constants_1.UserRoles.ADMIN }, { $set: { role: constants_1.UserRoles.USER } });
             }
@@ -70,15 +67,20 @@ class UserService extends base_service_1.BaseService {
             }
         });
     }
-    login(username, password) {
+    login(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            (0, helper_1.validateSchema)({ username, password }, user_validator_1.loginUserSchema, 'login');
-            const user = yield this.model.findOne({ username });
+            (0, helper_1.validateSchema)({ email, password }, user_validator_1.loginUserSchema, 'login');
+            const user = yield this.model.findOne({ email: email.toLowerCase() });
             if (!user || !(yield bcryptjs_1.default.compare(password, user.password))) {
                 throw new Error(constants_1.ErrorMessages.INCORRECT_LOGIN_CREDENTIALS);
             }
-            const token = jsonwebtoken_1.default.sign({ userId: user._id.toString(), role: user.role }, // Corrected type assertion for _id
-            process.env.TOKEN_SECRET);
+            // Generate JWT with user details
+            const token = jsonwebtoken_1.default.sign({
+                userId: user._id,
+                role: user.role,
+                firstName: user.firstName,
+                lastName: user.lastName
+            }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
             return { userId: user._id.toString(), token };
         });
     }

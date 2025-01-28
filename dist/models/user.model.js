@@ -17,7 +17,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const constants_1 = require("../constants");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const userSchema = new mongoose_1.default.Schema({
-    username: { type: String, required: true, unique: true, index: true },
+    email: { type: String, required: true, unique: true, index: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     password: { type: String, required: true },
     role: { type: String, enum: Object.values(constants_1.UserRoles), default: constants_1.UserRoles.USER },
     products: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Product' }]
@@ -30,7 +32,6 @@ userSchema.pre('save', function (next) {
         try {
             const salt = yield bcryptjs_1.default.genSalt(10);
             this.password = yield bcryptjs_1.default.hash(this.password, salt);
-            next();
         }
         catch (error) {
             next(error);
