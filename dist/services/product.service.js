@@ -15,6 +15,7 @@ const product_validator_1 = require("../validators/product.validator");
 const base_service_1 = require("./base.service");
 const constants_1 = require("../constants");
 const helper_1 = require("../utiles/helper");
+const pagination_1 = require("../utiles/pagination");
 class ProductService extends base_service_1.BaseService {
     constructor() {
         super(product_model_1.Product);
@@ -31,7 +32,8 @@ class ProductService extends base_service_1.BaseService {
     }
     getProducts() {
         return __awaiter(this, arguments, void 0, function* (query = {}) {
-            return yield this.model.find(query).populate('owner', 'username role').lean().exec();
+            const { results, total } = yield (0, pagination_1.paginateAndFilter)(this.model, query, 'owner');
+            return { products: results, total };
         });
     }
     getProductById(id) {

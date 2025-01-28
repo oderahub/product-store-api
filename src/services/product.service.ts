@@ -5,6 +5,8 @@ import { createProductSchema, updateProductSchema } from '../validators/product.
 import { BaseService } from './base.service'
 import { ErrorMessages } from '../constants'
 import { validateSchema, checkOwnership } from '../utiles/helper'
+import { paginateAndFilter } from '../utiles/pagination'
+
 import { Types } from 'mongoose'
 
 export class ProductService
@@ -26,8 +28,9 @@ export class ProductService
     return await newProduct.save()
   }
 
-  async getProducts(query: any = {}): Promise<IProduct[]> {
-    return await this.model.find(query).populate('owner', 'username role').lean().exec()
+  async getProducts(query: any = {}): Promise<{ products: IProduct[]; total: number }> {
+    const { results, total } = await paginateAndFilter<IProductDocument>(this.model, query, 'owner')
+    return { products: results, total }
   }
 
   async getProductById(id: string): Promise<IProduct | null> {

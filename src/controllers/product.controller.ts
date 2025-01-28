@@ -32,10 +32,26 @@ export class ProductController extends BaseController<IProduct> {
 
   public getProducts = this.asyncWrapperHandler(async (req: Request, res: Response) => {
     try {
-      const products = await this.productService.getProducts(req.query)
-      this.handleResponse(res, SuccessMessages.PRODUCTS_RETRIEVED, products)
+      const { products, total } = await this.productService.getProducts(req.query)
+      if (products.length === 0) {
+        return this.handleResponse(
+          res,
+          'No products found',
+          { products: [], total: 0 },
+          HTTP_STATUS.NOT_FOUND
+        )
+      }
+      this.handleResponse<{ products: IProduct[]; total: number }>(
+        res,
+        SuccessMessages.PRODUCTS_RETRIEVED,
+        { products, total }
+      )
     } catch (error: any) {
-      this.handleError(res, error)
+      if (error.message === 'Invalid page number' || error.message === 'Invalid limit') {
+        this.handleError(res, error, HTTP_STATUS.BAD_REQUEST)
+      } else {
+        this.handleError(res, error)
+      }
     }
   })
 
@@ -103,7 +119,7 @@ export class ProductController extends BaseController<IProduct> {
     }
     try {
       await this.productService.deleteProduct(req.params.id, userId, userRole)
-      this.handleResponse(res, SuccessMessages.PRODUCT_DELETED, null, HTTP_STATUS.NO_CONTENT)
+      this.handleResponse(res, SuccessMessages.PRODUCT_DELETED, HTTP_STATUS.NO_CONTENT)
     } catch (error: any) {
       if (error.message === ErrorMessages.NOT_PRODUCT_OWNER) {
         this.handleError(res, error, HTTP_STATUS.FORBIDDEN)

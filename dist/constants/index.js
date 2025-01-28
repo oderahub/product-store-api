@@ -19,6 +19,7 @@ var SuccessMessages;
     SuccessMessages["USER_CREATED"] = "User created successfully";
     SuccessMessages["USER_UPDATED"] = "User updated successfully";
     SuccessMessages["USER_DELETED"] = "User deleted successfully";
+    SuccessMessages["USER_RETRIEVED"] = "User retrieved successfully";
     SuccessMessages["LOGIN_SUCCESSFUL"] = "Login successful.";
     SuccessMessages["PRODUCT_CREATED"] = "Product created successfully";
     SuccessMessages["PRODUCT_UPDATED"] = "Product updated successfully";

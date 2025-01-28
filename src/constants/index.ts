@@ -15,6 +15,7 @@ export enum SuccessMessages {
   USER_CREATED = 'User created successfully',
   USER_UPDATED = 'User updated successfully',
   USER_DELETED = 'User deleted successfully',
+  USER_RETRIEVED = 'User retrieved successfully',
   LOGIN_SUCCESSFUL = 'Login successful.',
   PRODUCT_CREATED = 'Product created successfully',
   PRODUCT_UPDATED = 'Product updated successfully',

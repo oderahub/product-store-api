@@ -52,7 +52,7 @@ export class UserController extends BaseController<IUser> {
       if (!user) {
         return this.handleError(res, new Error(ErrorMessages.USER_NOT_FOUND), HTTP_STATUS.NOT_FOUND)
       }
-      this.handleResponse(res, SuccessMessages.USER_CREATED, user)
+      this.handleResponse(res, SuccessMessages.USER_RETRIEVED, user)
     } catch (error: any) {
       this.handleError(res, error)
     }

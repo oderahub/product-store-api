@@ -47,7 +47,7 @@ class UserController extends base_controller_1.BaseController {
                 if (!user) {
                     return this.handleError(res, new Error(constants_1.ErrorMessages.USER_NOT_FOUND), constants_1.HTTP_STATUS.NOT_FOUND);
                 }
-                this.handleResponse(res, constants_1.SuccessMessages.USER_CREATED, user);
+                this.handleResponse(res, constants_1.SuccessMessages.USER_RETRIEVED, user);
             }
             catch (error) {
                 this.handleError(res, error);

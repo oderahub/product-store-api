@@ -32,11 +32,19 @@ class ProductController extends base_controller_1.BaseController {
         }));
         this.getProducts = this.asyncWrapperHandler((req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const products = yield this.productService.getProducts(req.query);
-                this.handleResponse(res, constants_1.SuccessMessages.PRODUCTS_RETRIEVED, products);
+                const { products, total } = yield this.productService.getProducts(req.query);
+                if (products.length === 0) {
+                    return this.handleResponse(res, 'No products found', { products: [], total: 0 }, constants_1.HTTP_STATUS.NOT_FOUND);
+                }
+                this.handleResponse(res, constants_1.SuccessMessages.PRODUCTS_RETRIEVED, { products, total });
             }
             catch (error) {
-                this.handleError(res, error);
+                if (error.message === 'Invalid page number' || error.message === 'Invalid limit') {
+                    this.handleError(res, error, constants_1.HTTP_STATUS.BAD_REQUEST);
+                }
+                else {
+                    this.handleError(res, error);
+                }
             }
         }));
         this.getProductById = this.asyncWrapperHandler((req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -83,7 +91,7 @@ class ProductController extends base_controller_1.BaseController {
             }
             try {
                 yield this.productService.deleteProduct(req.params.id, userId, userRole);
-                this.handleResponse(res, constants_1.SuccessMessages.PRODUCT_DELETED, null, constants_1.HTTP_STATUS.NO_CONTENT);
+                this.handleResponse(res, constants_1.SuccessMessages.PRODUCT_DELETED, constants_1.HTTP_STATUS.NO_CONTENT);
             }
             catch (error) {
                 if (error.message === constants_1.ErrorMessages.NOT_PRODUCT_OWNER) {
