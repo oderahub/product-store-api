@@ -8,6 +8,8 @@ services:
       - .env
     depends_on:
       - mongo
+    command: /wait-for-it.sh mongo:27017 -- node dist/index.js # Wait until MongoDB is ready
+
   mongo:
     image: mongo
     ports:

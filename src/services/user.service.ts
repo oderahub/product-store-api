@@ -4,7 +4,7 @@ import { IUserDocument, User } from '../models/user.model'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { BaseService } from './base.service'
-import { ErrorMessages, UserRoles } from '../constants'
+import { ErrorMessages, UserRoles, JWT_EXPIRATION_TIME } from '../constants'
 import { createUserSchema, loginUserSchema } from '../validators/user.validator'
 import { validateSchema } from '../utiles/helper'
 import { Product } from '../models/product.model'
@@ -95,7 +95,7 @@ export class UserService
         lastName: user.lastName
       },
       process.env.TOKEN_SECRET as string,
-      { expiresIn: '1h' }
+      { expiresIn: JWT_EXPIRATION_TIME }
     )
 
     return { userId: user._id.toString(), token }

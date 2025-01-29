@@ -40,7 +40,7 @@ app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 // Rate limiting
 const apiLimiter = (0, express_rate_limit_1.default)({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000,
     max: 100 // Limit each IP to 100 requests per windowMs
 });
 app.use('/api/', apiLimiter);
@@ -53,12 +53,12 @@ app.use((req, res, next) => {
 app.use('/api/v1/auth', auth_route_1.default);
 app.use('/api/v1/products', product_route_1.default);
 app.use('/api/v1/users', user_route_1.default);
-// Error handling middleware
-app.use(error_middleware_1.errorHandler);
 // Root route
 app.get('/', (req, res) => {
     res.send('Welcome to the Store API!');
 });
+// Error handling middleware
+app.use(error_middleware_1.errorHandler);
 // Start server
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -87,4 +87,4 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
         process.exit(1);
     }
 });
-start(); // Call the start function
+start();

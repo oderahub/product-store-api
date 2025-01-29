@@ -9,7 +9,9 @@ export enum ErrorMessages {
   NOT_PRODUCT_OWNER = 'You do not own this product.',
   PRODUCT_ALREADY_EXISTS = 'Product already exists.',
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
-  UNAUTHORIZED_ACTION = 'Unauthorized action'
+  UNAUTHORIZED_ACTION = 'Unauthorized action',
+  DATABASE_ERROR = 'Database error occurred',
+  DUPLICATE_KEY = 'Duplicate key error'
 }
 
 export enum SuccessMessages {
@@ -37,5 +39,8 @@ export const HTTP_STATUS = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
+  CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500
 }
+
+export const JWT_EXPIRATION_TIME = '1h'

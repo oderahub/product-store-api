@@ -91,7 +91,7 @@ class ProductController extends base_controller_1.BaseController {
             }
             try {
                 yield this.productService.deleteProduct(req.params.id, userId, userRole);
-                res.status(constants_1.HTTP_STATUS.NO_CONTENT).send(); // Use send() instead of json()
+                res.status(constants_1.HTTP_STATUS.NO_CONTENT).send();
             }
             catch (error) {
                 if (error.message === constants_1.ErrorMessages.NOT_PRODUCT_OWNER) {

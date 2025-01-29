@@ -85,7 +85,7 @@ class UserService extends base_service_1.BaseService {
                 role: user.role,
                 firstName: user.firstName,
                 lastName: user.lastName
-            }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+            }, process.env.TOKEN_SECRET, { expiresIn: constants_1.JWT_EXPIRATION_TIME });
             return { userId: user._id.toString(), token };
         });
     }

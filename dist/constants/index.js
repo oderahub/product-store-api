@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HTTP_STATUS = exports.UserRoles = exports.SuccessMessages = exports.ErrorMessages = void 0;
+exports.JWT_EXPIRATION_TIME = exports.HTTP_STATUS = exports.UserRoles = exports.SuccessMessages = exports.ErrorMessages = void 0;
 var ErrorMessages;
 (function (ErrorMessages) {
     ErrorMessages["UNAUTHENTICATED_USER"] = "You must be logged in to perform this operation";
@@ -14,6 +14,8 @@ var ErrorMessages;
     ErrorMessages["PRODUCT_ALREADY_EXISTS"] = "Product already exists.";
     ErrorMessages["INTERNAL_SERVER_ERROR"] = "INTERNAL_SERVER_ERROR";
     ErrorMessages["UNAUTHORIZED_ACTION"] = "Unauthorized action";
+    ErrorMessages["DATABASE_ERROR"] = "Database error occurred";
+    ErrorMessages["DUPLICATE_KEY"] = "Duplicate key error";
 })(ErrorMessages || (exports.ErrorMessages = ErrorMessages = {}));
 var SuccessMessages;
 (function (SuccessMessages) {
@@ -40,5 +42,7 @@ exports.HTTP_STATUS = {
     UNAUTHORIZED: 401,
     FORBIDDEN: 403,
     NOT_FOUND: 404,
+    CONFLICT: 409,
     INTERNAL_SERVER_ERROR: 500
 };
+exports.JWT_EXPIRATION_TIME = '1h';

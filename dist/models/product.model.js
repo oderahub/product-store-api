@@ -1,30 +1,9 @@
 "use strict";
-// import mongoose, { Document, Model, Types } from 'mongoose'
-// import { IProduct } from '../interfaces/product.interface'
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
-// export interface IProductDocument extends IProduct, Document {
-//   _id: Types.ObjectId
-// }
-// const productSchema = new mongoose.Schema<IProductDocument>({
-//   name: { type: String, required: true },
-//   price: { type: Number, required: true },
-//   description: String,
-//   category: { type: String, required: true, index: true },
-//   createdAt: { type: Date, default: Date.now },
-//   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
-// })
-// // Create indexes for query efficiency
-// productSchema.index({ name: 'text', description: 'text' })
-// productSchema.index({ price: 1 })
-// productSchema.index({ createdAt: 1 })
-// export const Product: Model<IProductDocument> = mongoose.model<IProductDocument>(
-//   'Product',
-//   productSchema
-// )
 const mongoose_1 = __importDefault(require("mongoose"));
 const productSchema = new mongoose_1.default.Schema({
     name: { type: String, required: true },
