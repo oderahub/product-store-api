@@ -8,7 +8,8 @@ export enum ErrorMessages {
   PRODUCT_NOT_FOUND = 'Product not found.',
   NOT_PRODUCT_OWNER = 'You do not own this product.',
   PRODUCT_ALREADY_EXISTS = 'Product already exists.',
-  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR'
+  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+  UNAUTHORIZED_ACTION = 'Unauthorized action'
 }
 
 export enum SuccessMessages {

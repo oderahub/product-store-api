@@ -24,32 +24,35 @@ const product_model_1 = require("../models/product.model");
 class UserService extends base_service_1.BaseService {
     constructor() {
         super(user_model_1.User);
-        this.productModel = product_model_1.Product;
     }
+    // Create a new user
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             (0, helper_1.validateSchema)(user, user_validator_1.createUserSchema, 'createUser');
             if (yield this.model.findOne({ email: user.email })) {
                 throw new Error(constants_1.ErrorMessages.USER_ALREADY_EXISTS);
             }
-            const newUser = new this.model(user); // Pass the user object directly, the password will be hashed by the middleware
+            const newUser = new this.model(user);
             yield newUser.save();
+            // If user role is admin, update other admin users to regular user
             if (user.role === constants_1.UserRoles.ADMIN) {
                 yield this.model.updateMany({ _id: { $ne: newUser._id }, role: constants_1.UserRoles.ADMIN }, { $set: { role: constants_1.UserRoles.USER } });
             }
             return newUser.toObject({ versionKey: false });
         });
     }
+    // Get user by ID
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.findById(id);
             return user ? Object.assign(Object.assign({}, user.toObject()), { password: undefined }) : null;
         });
     }
+    // Update user details
     updateUser(id, user) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingUser = yield this.validateExistence(yield this.findById(id), constants_1.ErrorMessages.USER_NOT_FOUND);
-            // The hashing will be done by the middleware if password is modified
+            // Admin user handling
             if (user.role === constants_1.UserRoles.ADMIN && existingUser.role !== constants_1.UserRoles.ADMIN) {
                 yield this.model.updateMany({ _id: { $ne: id }, role: constants_1.UserRoles.ADMIN }, { $set: { role: constants_1.UserRoles.USER } });
             }
@@ -59,6 +62,7 @@ class UserService extends base_service_1.BaseService {
                 .exec();
         });
     }
+    // Delete a user
     deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.validateExistence(yield this.model.findByIdAndDelete(id).exec(), constants_1.ErrorMessages.USER_NOT_FOUND);
@@ -67,6 +71,7 @@ class UserService extends base_service_1.BaseService {
             }
         });
     }
+    // User login (authenticate user and generate token)
     login(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
             (0, helper_1.validateSchema)({ email, password }, user_validator_1.loginUserSchema, 'login');

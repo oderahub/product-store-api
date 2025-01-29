@@ -4,7 +4,8 @@
   "description": "A simple RESTful API to create and manage products in a store",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose",
+    "test:watch": "jest --watch"
   },
   "author": "chidera",
   "license": "ISC",

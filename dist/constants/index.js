@@ -13,6 +13,7 @@ var ErrorMessages;
     ErrorMessages["NOT_PRODUCT_OWNER"] = "You do not own this product.";
     ErrorMessages["PRODUCT_ALREADY_EXISTS"] = "Product already exists.";
     ErrorMessages["INTERNAL_SERVER_ERROR"] = "INTERNAL_SERVER_ERROR";
+    ErrorMessages["UNAUTHORIZED_ACTION"] = "Unauthorized action";
 })(ErrorMessages || (exports.ErrorMessages = ErrorMessages = {}));
 var SuccessMessages;
 (function (SuccessMessages) {

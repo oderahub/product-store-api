@@ -26,12 +26,12 @@ const userSchema = new mongoose_1.default.Schema({
 });
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!this.isModified('password')) {
+        if (!this.isModified('password'))
             return next();
-        }
         try {
             const salt = yield bcryptjs_1.default.genSalt(10);
             this.password = yield bcryptjs_1.default.hash(this.password, salt);
+            next();
         }
         catch (error) {
             next(error);
@@ -40,7 +40,7 @@ userSchema.pre('save', function (next) {
 });
 userSchema.methods.comparePassword = function (candidatePassword) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield bcryptjs_1.default.compare(candidatePassword, this.password);
+        return bcryptjs_1.default.compare(candidatePassword, this.password);
     });
 };
 exports.User = mongoose_1.default.model('User', userSchema);

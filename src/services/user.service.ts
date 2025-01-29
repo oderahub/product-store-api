@@ -17,6 +17,7 @@ export class UserService
     super(User)
   }
 
+  // Create a new user
   async createUser(user: IUser): Promise<IUser> {
     validateSchema(user, createUserSchema, 'createUser')
 
@@ -24,9 +25,10 @@ export class UserService
       throw new Error(ErrorMessages.USER_ALREADY_EXISTS)
     }
 
-    const newUser = new this.model(user) // Pass the user object directly, the password will be hashed by the middleware
+    const newUser = new this.model(user)
     await newUser.save()
 
+    // If user role is admin, update other admin users to regular user
     if (user.role === UserRoles.ADMIN) {
       await this.model.updateMany(
         { _id: { $ne: newUser._id }, role: UserRoles.ADMIN },
@@ -37,18 +39,20 @@ export class UserService
     return newUser.toObject({ versionKey: false })
   }
 
+  // Get user by ID
   async getUserById(id: string): Promise<IUser | null> {
     const user = await this.findById(id)
     return user ? { ...user.toObject(), password: undefined } : null
   }
 
+  // Update user details
   async updateUser(id: string, user: Partial<IUser>): Promise<IUser | null> {
     const existingUser = await this.validateExistence(
       await this.findById(id),
       ErrorMessages.USER_NOT_FOUND
     )
 
-    // The hashing will be done by the middleware if password is modified
+    // Admin user handling
     if (user.role === UserRoles.ADMIN && existingUser.role !== UserRoles.ADMIN) {
       await this.model.updateMany(
         { _id: { $ne: id }, role: UserRoles.ADMIN },
@@ -62,6 +66,7 @@ export class UserService
       .exec()
   }
 
+  // Delete a user
   async deleteUser(id: string): Promise<void> {
     const user = await this.validateExistence(
       await this.model.findByIdAndDelete(id).exec(),
@@ -72,6 +77,7 @@ export class UserService
     }
   }
 
+  // User login (authenticate user and generate token)
   async login(email: string, password: string): Promise<{ userId: string; token: string }> {
     validateSchema({ email, password }, loginUserSchema, 'login')
 
@@ -91,8 +97,7 @@ export class UserService
       process.env.TOKEN_SECRET as string,
       { expiresIn: '1h' }
     )
+
     return { userId: user._id.toString(), token }
   }
-
-  private productModel = Product
 }

@@ -20,6 +20,7 @@ class ProductService extends base_service_1.BaseService {
     constructor() {
         super(product_model_1.Product);
     }
+    // Create a product
     createProduct(product, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             if (yield this.model.findOne({ name: product.name, category: product.category })) {
@@ -30,17 +31,20 @@ class ProductService extends base_service_1.BaseService {
             return yield newProduct.save();
         });
     }
+    // Get all products with pagination and filtering
     getProducts() {
         return __awaiter(this, arguments, void 0, function* (query = {}) {
             const { results, total } = yield (0, pagination_1.paginateAndFilter)(this.model, query, 'owner');
             return { products: results, total };
         });
     }
+    // Get a single product by ID
     getProductById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.model.findById(id).populate('owner', 'username role').lean().exec();
         });
     }
+    // Update a product
     updateProduct(id, product, userId, userRole) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingProduct = yield this.findById(id);
@@ -56,6 +60,7 @@ class ProductService extends base_service_1.BaseService {
                 .exec();
         });
     }
+    // Delete a product
     deleteProduct(id, userId, userRole) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingProduct = yield this.findById(id);
