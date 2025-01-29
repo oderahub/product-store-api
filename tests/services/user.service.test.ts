@@ -9,11 +9,11 @@ jest.mock('../../src/services/user.service')
 interface CustomRequest extends Request {
   user?: {
     userId: string
-    role: string // Remove the '?' to make role required
+    role: string
   }
 }
 interface MockUser extends Omit<IUser, 'password'> {
-  password?: string // Optional here
+  password?: string
 }
 
 describe('UserController', () => {
@@ -61,7 +61,7 @@ describe('UserController', () => {
       expect(res.status).toHaveBeenCalledWith(HTTP_STATUS.CREATED)
       expect(res.json).toHaveBeenCalledWith({
         message: SuccessMessages.USER_CREATED,
-        data: { userId: user._id } // Assuming _id is returned by createUser method
+        data: { userId: user._id }
       })
     })
   })
@@ -88,7 +88,7 @@ describe('UserController', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
-        password: undefined, // Now this is allowed
+        password: undefined, // Ensure password isn't sent back
         role: UserRoles.USER
       }
       userService.getUserById.mockResolvedValue(user as IUser)
@@ -98,7 +98,7 @@ describe('UserController', () => {
       expect(res.status).toHaveBeenCalledWith(HTTP_STATUS.OK)
       expect(res.json).toHaveBeenCalledWith({
         message: SuccessMessages.USER_RETRIEVED,
-        data: user // Ensure this matches what your service actually does
+        data: user
       })
     })
 
@@ -132,7 +132,7 @@ describe('UserController', () => {
       expect(res.status).toHaveBeenCalledWith(HTTP_STATUS.OK)
       expect(res.json).toHaveBeenCalledWith({
         message: SuccessMessages.USER_UPDATED,
-        data: { ...user, password: 'Password123!' } // Assuming password isn't sent back on update
+        data: { ...user, password: 'Password123!' } // Ensure password isn't sent back
       })
     })
 
@@ -151,7 +151,7 @@ describe('UserController', () => {
   describe('deleteUser', () => {
     it('should delete a user successfully', async () => {
       req.params = { id: '123' }
-      req.user = { userId: '123', role: UserRoles.ADMIN } // Set role to admin if required
+      req.user = { userId: '123', role: UserRoles.ADMIN }
       userService.deleteUser.mockResolvedValue()
 
       await userController.deleteUser(req as Request, res as Response, jest.fn())
@@ -162,7 +162,6 @@ describe('UserController', () => {
         data: null
       })
     })
-    // ... rest of your test cases
 
     it('should handle unauthenticated user', async () => {
       req.user = undefined

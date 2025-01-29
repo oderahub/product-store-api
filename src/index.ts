@@ -31,7 +31,7 @@ app.use(bodyParser.json())
 
 // Rate limiting
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 100 // Limit each IP to 100 requests per windowMs
 })
 app.use('/api/', apiLimiter)
@@ -47,13 +47,13 @@ app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/products', productRoute)
 app.use('/api/v1/users', userRoute)
 
-// Error handling middleware
-app.use(errorHandler)
-
 // Root route
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to the Store API!')
 })
+
+// Error handling middleware
+app.use(errorHandler)
 
 // Start server
 const start = async () => {
@@ -85,4 +85,4 @@ const start = async () => {
   }
 }
 
-start() // Call the start function
+start()

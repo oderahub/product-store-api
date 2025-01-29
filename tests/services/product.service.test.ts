@@ -10,7 +10,7 @@ jest.mock('../../src/services/product.service')
 interface CustomRequest extends Request {
   user?: {
     userId: string
-    role: string // Remove the '?' to make role required
+    role: string
   }
 }
 
@@ -25,7 +25,7 @@ describe('ProductController', () => {
     mockRes = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-      send: jest.fn() // Add this line
+      send: jest.fn()
     }
   })
 
@@ -75,8 +75,6 @@ describe('ProductController', () => {
         data: { products: [], total: 0 }
       })
     })
-
-    // Additional tests for error cases can be added here
   })
 
   describe('getProductById', () => {
@@ -95,8 +93,6 @@ describe('ProductController', () => {
         data: { id: '123', name: 'Test Product' }
       })
     })
-
-    // Test for product not found
   })
 
   describe('updateProduct', () => {
@@ -117,8 +113,6 @@ describe('ProductController', () => {
         data: { id: '123', name: 'Updated Product' }
       })
     })
-
-    // Test unauthorized scenarios
   })
 
   it('should delete product if authorized', async () => {
@@ -129,7 +123,7 @@ describe('ProductController', () => {
     await controller.deleteProduct(mockReq as Request, mockRes as Response, jest.fn())
 
     expect(mockRes.status).toHaveBeenCalledWith(204)
-    expect(mockRes.json).not.toHaveBeenCalled() // Ensure json() is not called
-    expect(mockRes.send).toHaveBeenCalled() // Ensure send() is called
+    expect(mockRes.json).not.toHaveBeenCalled()
+    expect(mockRes.send).toHaveBeenCalled()
   })
 })

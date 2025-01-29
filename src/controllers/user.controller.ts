@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { UserService } from '../services/user.service'
-import { IUser, LoginResponse } from '../interfaces/user.interface'
+import { IUser } from '../interfaces/user.interface'
 import { BaseController } from './base.controller'
 import { ErrorMessages, SuccessMessages, HTTP_STATUS, UserRoles } from '../constants'
 import { checkRole } from '../middlewares/auth.middleware'

@@ -120,7 +120,7 @@ export class ProductController extends BaseController<IProduct> {
 
     try {
       await this.productService.deleteProduct(req.params.id, userId, userRole)
-      res.status(HTTP_STATUS.NO_CONTENT).send() // Use send() instead of json()
+      res.status(HTTP_STATUS.NO_CONTENT).send()
     } catch (error: any) {
       if (error.message === ErrorMessages.NOT_PRODUCT_OWNER) {
         this.handleError(res, error, HTTP_STATUS.FORBIDDEN)
