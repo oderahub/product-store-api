@@ -1,0 +1,52 @@
+# Store-API
+
+A simple RESTful API for managing products and users in a store.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Overview
+
+This project implements a RESTful API using Node.js, Express, TypeScript, and MongoDB. It provides functionality for user authentication, product management, with a focus on security, scalability, and maintainability.
+
+## Features
+
+- **User Management:**
+
+  - User registration and login
+  - User profile management (update, delete - admin only)
+
+- **Product Management:**
+
+  - CRUD operations for products
+  - Ownership checks to ensure users can only modify their own products unless they are admins
+
+- **Security:**
+
+  - JWT-based authentication
+  - Role-based authorization (admin vs. user roles)
+  - Input validation with Joi
+  - Password hashing with bcrypt
+
+- **Logging:** Winston for logging errors and information
+
+- **Database:** MongoDB with Mongoose for ORM
+
+- **Testing:** Unit tests using Jest
+
+## Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone
+   cd store-api
+   ```
