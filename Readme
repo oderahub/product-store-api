@@ -13,6 +13,7 @@ A simple RESTful API for managing products and users in a store.
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [License](#license)
+- [Docker](#docker)
 
 ## Overview
 
@@ -43,10 +44,11 @@ This project implements a RESTful API using Node.js, Express, TypeScript, and Mo
 
 - **Testing:** Unit tests using Jest
 
+- **Containerization:** Docker for easy deployment and consistency across environments
+
 ## Installation
 
 1. **Clone the repository:**
    ```bash
    git clone
-   cd store-api
    ```
