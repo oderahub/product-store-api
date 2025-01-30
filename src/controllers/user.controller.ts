@@ -95,12 +95,14 @@ export class UserController extends BaseController<IUser> {
       )
     }
     try {
-      checkRole(UserRoles.ADMIN)(req, res, async () => {
-        await this.userService.deleteUser(req.params.id)
-        this.handleResponse(res, SuccessMessages.USER_DELETED, null, HTTP_STATUS.NO_CONTENT)
-      })
+      await this.userService.deleteUser(req.params.id)
+      this.handleResponse(res, SuccessMessages.USER_DELETED, null, HTTP_STATUS.NO_CONTENT)
     } catch (error: any) {
-      this.handleError(res, error)
+      if (error.message === ErrorMessages.USER_NOT_FOUND) {
+        this.handleError(res, error, HTTP_STATUS.NOT_FOUND)
+      } else {
+        this.handleError(res, error)
+      }
     }
   })
 }

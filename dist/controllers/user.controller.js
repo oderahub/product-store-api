@@ -13,7 +13,6 @@ exports.UserController = void 0;
 const user_service_1 = require("../services/user.service");
 const base_controller_1 = require("./base.controller");
 const constants_1 = require("../constants");
-const auth_middleware_1 = require("../middlewares/auth.middleware");
 class UserController extends base_controller_1.BaseController {
     constructor() {
         super();
@@ -82,13 +81,16 @@ class UserController extends base_controller_1.BaseController {
                 return this.handleError(res, new Error(constants_1.ErrorMessages.UNAUTHENTICATED_USER), constants_1.HTTP_STATUS.UNAUTHORIZED);
             }
             try {
-                (0, auth_middleware_1.checkRole)(constants_1.UserRoles.ADMIN)(req, res, () => __awaiter(this, void 0, void 0, function* () {
-                    yield this.userService.deleteUser(req.params.id);
-                    this.handleResponse(res, constants_1.SuccessMessages.USER_DELETED, null, constants_1.HTTP_STATUS.NO_CONTENT);
-                }));
+                yield this.userService.deleteUser(req.params.id);
+                this.handleResponse(res, constants_1.SuccessMessages.USER_DELETED, null, constants_1.HTTP_STATUS.NO_CONTENT);
             }
             catch (error) {
-                this.handleError(res, error);
+                if (error.message === constants_1.ErrorMessages.USER_NOT_FOUND) {
+                    this.handleError(res, error, constants_1.HTTP_STATUS.NOT_FOUND);
+                }
+                else {
+                    this.handleError(res, error);
+                }
             }
         }));
         this.userService = new user_service_1.UserService();
