@@ -1,5 +1,5 @@
 services:
-  - name: store-api
+  - name: new-store-api
     type: web
     env: node
     buildCommand: npm install && npm run build
