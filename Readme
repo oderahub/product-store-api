@@ -53,3 +53,28 @@ This project implements a RESTful API using Node.js, Express, TypeScript, and Mo
    ```bash
    git clone https://github.com/oderahub/product-store-api
    ```
+
+Install Node.js and npm if not already installed.
+Install dependencies:
+bash
+npm install
+
+Usage
+Start the server:
+bash
+npm start
+
+Docker
+This project uses Docker for containerization which ensures consistency across different environments. Here's how to use Docker with this project:
+
+Pull the image:
+bash
+docker pull oderadev/store-api:v1
+Run the pulled image:
+bash
+docker run -d -p 3000:3000 --name store-api oderadev/store-api:v1
+
+Deployment
+The API is deployed and can be accessed at:
+
+Live: https://product-store-api-v1.onrender.com/
