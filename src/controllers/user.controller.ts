@@ -3,7 +3,6 @@ import { UserService } from '../services/user.service'
 import { IUser } from '../interfaces/user.interface'
 import { BaseController } from './base.controller'
 import { ErrorMessages, SuccessMessages, HTTP_STATUS, UserRoles } from '../constants'
-import { checkRole } from '../middlewares/auth.middleware'
 
 export class UserController extends BaseController<IUser> {
   private userService: UserService

@@ -4,6 +4,7 @@
   "description": "A simple RESTful API to create and manage products in a store",
   "main": "dist/index.js",
   "scripts": {
+    "start": "node dist/index.js",
     "test": "jest --verbose",
     "test:watch": "jest --watch",
     "build": "tsc"
