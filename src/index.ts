@@ -49,7 +49,14 @@ app.use('/api/v1/users', userRoute)
 
 // Root route
 app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the Store API!')
+  res.json({
+    message: 'Welcome to the Store API!',
+    routes: {
+      auth: '/api/v1/auth',
+      products: '/api/v1/products',
+      users: '/api/v1/users'
+    }
+  })
 })
 
 // Error handling middleware
